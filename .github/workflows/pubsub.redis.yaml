@@ -1,0 +1,30 @@
+name: pubsub.redis
+
+env:
+  NETCORE_VERSION: 5.0.100
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      name: checkout
+    - uses: actions/setup-dotnet@v1
+      name: dotnet installer
+      with:
+        dotnet-version: ${{ env.NETCORE_VERSION }}
+    - run: dotnet restore
+      name: dotnet restore
+      working-directory: ./pubsub.redis
+    - run: dotnet build --no-restore
+      name: dotnet build
+      working-directory: ./pubsub.redis

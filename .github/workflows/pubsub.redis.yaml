@@ -1,4 +1,4 @@
-name: PubSub
+name: pubsub.redis
 
 env:
   NETCORE_VERSION: 5.0.100
@@ -18,7 +18,7 @@ jobs:
         dotnet-version: ${{ env.NETCORE_VERSION }}
     - run: dotnet restore
       name: dotnet restore
-      working-directory: ./pubsub
+      working-directory: ./pubsub.redis
     - run: dotnet build --no-restore
       name: dotnet build
-      working-directory: ./pubsub
+      working-directory: ./pubsub.redis

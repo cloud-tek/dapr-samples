@@ -28,8 +28,18 @@ extensions:
 services:
 - name: Service1
   project: Service1/Service1.csproj
+  bindings: 
+  - port: 15000
+  # env:
+  # - name: DAPR_HTTP_PORT
+  #   value: "3500"
 - name: Service2
   project: Service2/Service2.csproj
+- name: Service3
+  project: Service3/Service3.csproj
+  # env:
+  # - name: DAPR_HTTP_PORT
+  #   value: "3500"
 
 # NOTE:
 # if dapr --init was not run, uncomment the redis service

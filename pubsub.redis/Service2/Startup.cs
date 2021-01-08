@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Service2.Middleware;
 
 namespace Service2
 {
@@ -49,6 +50,8 @@ namespace Service2
             app.UseRouting();
 
             app.UseAuthorization();
+
+            // app.UseMiddleware<DebugMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

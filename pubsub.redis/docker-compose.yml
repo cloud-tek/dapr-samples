@@ -47,7 +47,8 @@ services:
     command: ["./daprd",
       "-app-id", "service-1",
       "-app-port", "80",
-      "-components-path", "/components"
+      "-components-path", "/components",
+      "-placement-host-address", "placement:50000",
       #"-config", "/configuration/eshop-config.yaml"
     ]
     volumes:
@@ -72,7 +73,8 @@ services:
     command: ["./daprd",
       "-app-id", "service-2",
       "-app-port", "80",
-      "-components-path", "/components"
+      "-components-path", "/components",
+      "-placement-host-address", "placement:50000",
       #"-config", "/configuration/eshop-config.yaml"
     ]
     volumes:

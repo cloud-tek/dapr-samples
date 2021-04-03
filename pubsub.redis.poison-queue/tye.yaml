@@ -26,28 +26,22 @@ extensions:
           
 
 services:
-- name: pubsub-service1
+- name: Service1
   project: Service1/Service1.csproj
   bindings: 
   - port: 15000
-  # env:
-  # - name: DAPR_HTTP_PORT
-  #   value: "3500"
-- name: pubsub-service2
+- name: Service2
   project: Service2/Service2.csproj
-- name: pubsub-service3
-  project: Service3/Service3.csproj
-  # env:
-  # - name: DAPR_HTTP_PORT
-  #   value: "3500"
-
+- name: azurite
+  image: mcr.microsoft.com/azure-storage/azurite:latest
+  bindings: 
+  - name: blobs
+    port: 10000
+  - name: queues
+    port: 10001
 # NOTE:
 # if dapr --init was not run, uncomment the redis service
 # - name: redis
 #   image: redis
 #   bindings: 
 #   - port: 6379
-# - name: zipkin
-#   image: openzipkin/zipkin
-#   bindings: 
-#   - port: 9411

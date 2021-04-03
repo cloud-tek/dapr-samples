@@ -53,7 +53,8 @@ namespace Service3
                     
                     context.Response.StatusCode = 200;
                     
-                }).WithMetadata(new TopicAttribute("pubsub", "ordertopic"));
+                })
+                .WithMetadata(new TopicAttribute("pubsub", "ordertopic"));
             });
         }
     }

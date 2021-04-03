@@ -26,11 +26,14 @@ namespace Service1.Controllers
                 return BadRequest(order);
             }
 
-            try {
-                await client.PublishEventAsync("pubsub", "ordertopic", order);
+            try 
+            {
+                await client.PublishEventAsync("pubsub", "ordertopic", new Envelope<Order>(order));
                 _logger.LogInformation($"Order with id {order.id} published");
-            } catch(Exception ex) {
-                _logger.LogInformation($"Failed to publish order id {order.id} : {ex.Message.ToString()} : {ex.InnerException?.Message.ToString()}", ex);
+            } 
+            catch(Exception ex) 
+            {
+                _logger.LogInformation($"Failed to publish order id {order.id}", ex);
                 return StatusCode(500);
             }
     

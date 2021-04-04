@@ -12,7 +12,7 @@
 .tye
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
-
+*.ncrunch*
 # Mono auto generated files
 mono_crash.*
 

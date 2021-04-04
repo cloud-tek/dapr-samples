@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace Service2.Controllers
 {
-    //[Route("api/[controller]")]
     [ApiController]
     public class OrderController : ControllerBase
     {

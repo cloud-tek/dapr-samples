@@ -1,0 +1,82 @@
+version: '3.4'
+
+services:
+
+  dapr-placement:
+    image: "daprio/dapr:1.1.0"
+    command: ["./placement", "-port", "50000", "-log-level", "debug"]
+    ports:
+      - "50000:50000"
+
+  # rabbitmq:
+  #   image: rabbitmq:3-management-alpine
+
+  redis:
+    image: redis:alpine
+    ports:
+      - 6379:6379
+
+  # seq:
+  #   image: datalust/seq:latest
+
+  # sqldata:
+  #   image: mcr.microsoft.com/mssql/server:2017-latest 
+
+  zipkin:
+    image: openzipkin/zipkin-slim
+    ports:
+      - 9411:9411
+
+  service-1:
+    image: ${REGISTRY:-cloudtek}/service-1:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Service1/Dockerfile
+    ports:
+      - 15000:80
+    depends_on:
+      - dapr-placement
+      - redis
+      - zipkin
+
+  service-1-dapr:
+    image: "daprio/daprd:1.1.0"
+    network_mode: "service:service-1"
+    depends_on:
+      - service-1
+    command: ["./daprd",
+      "-app-id", "service-1",
+      "-app-port", "80",
+      "-components-path", "/components",
+      "-placement-host-address", "placement:50000",
+      "-config", "/configuration/configuration.yaml"
+    ]
+    volumes:
+      - "./dapr/components/:/components"
+      - "./dapr/configuration/:/configuration"
+
+  service-2:
+    image: ${REGISTRY:-cloudtek}/service-2:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Service2/Dockerfile
+    depends_on:
+      - dapr-placement
+      - redis
+      - zipkin
+
+  service-2-dapr:
+    image: "daprio/daprd:1.1.0"
+    network_mode: "service:service-2"
+    depends_on:
+      - service-2
+    command: ["./daprd",
+      "-app-id", "service-2",
+      "-app-port", "80",
+      "-components-path", "/components",
+      "-placement-host-address", "placement:50000",
+      "-config", "/configuration/configuration.yaml"
+    ]
+    volumes:
+      - "./dapr/components/:/components"
+      - "./dapr/configuration/:/configuration"

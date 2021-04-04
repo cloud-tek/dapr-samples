@@ -49,7 +49,7 @@ namespace Service2
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            //app.UseAuthorization();
 
             // app.UseMiddleware<DebugMiddleware>();
 

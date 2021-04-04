@@ -28,7 +28,7 @@ services:
       - 9411:9411
 
   service-1:
-    image: ${REGISTRY:-eshop}/service-1:${TAG:-latest}
+    image: ${REGISTRY:-cloudtek}/service-1:${TAG:-latest}
     build:
       context: .
       dockerfile: Service1/Dockerfile
@@ -49,14 +49,14 @@ services:
       "-app-port", "80",
       "-components-path", "/components",
       "-placement-host-address", "placement:50000",
-      #"-config", "/configuration/eshop-config.yaml"
+      "-config", "/configuration/configuration.yaml"
     ]
     volumes:
-      - "./components/:/components"
-      #- "./configuration/:/configuration"
+      - "./dapr/components/:/components"
+      - "./dapr/configuration/:/configuration"
 
   service-2:
-    image: ${REGISTRY:-eshop}/basket.api:${TAG:-latest}
+    image: ${REGISTRY:-cloudtek}/service-2:${TAG:-latest}
     build:
       context: .
       dockerfile: Service2/Dockerfile
@@ -75,7 +75,34 @@ services:
       "-app-port", "80",
       "-components-path", "/components",
       "-placement-host-address", "placement:50000",
-      #"-config", "/configuration/eshop-config.yaml"
+      "-config", "/configuration/configuration.yaml"
     ]
     volumes:
-      - "./components/:/components"
+      - "./dapr/components/:/components"
+      - "./dapr/configuration/:/configuration"
+
+  service-3:
+    image: ${REGISTRY:-cloudtek}/service-3:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Service3/Dockerfile
+    depends_on:
+      - dapr-placement
+      - redis
+      - zipkin
+
+  service-3-dapr:
+    image: "daprio/daprd:1.1.0"
+    network_mode: "service:service-3"
+    depends_on:
+      - service-3
+    command: ["./daprd",
+      "-app-id", "service-3",
+      "-app-port", "80",
+      "-components-path", "/components",
+      "-placement-host-address", "placement:50000",
+      "-config", "/configuration/configuration.yaml"
+    ]
+    volumes:
+      - "./dapr/components/:/components"
+      - "./dapr/configuration/:/configuration"
